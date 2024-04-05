@@ -1,0 +1,244 @@
+
+{% load static i18n compress%}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>
+      {% block title %}
+      Africom
+    {% endblock title %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="A digital online agency website" />
+  <meta name="author"
+        content="Jeckonia" />
+
+  {% block css %}
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+          integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+<!-- Your stuff: Third-party CSS libraries go here -->
+<!-- This file stores project-specific CSS -->
+
+
+{% compress css %}
+  <link href="{% static 'css/project.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/jquery-ui.css' %}" rel="stylesheet">
+
+<link href="{% static 'assets/css/bootstrap-icons.css' %}" rel="stylesheet">
+
+<link href="{% static 'assets/css/animate.min.css' %}" rel="stylesheet">
+
+<link href="{% static 'assets/css/jquery.fancybox.min.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/slick.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/slick-theme.css' %}">
+
+<link href="{% static 'assets/css/boxicons.min.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+<title></title>
+<link rel="icon" href="{% static 'images/logo.jpg' %}" type="image/gif" sizes="20x20">
+{% endcompress %}
+
+
+{% endblock css %}
+<!-- Le javascript
+    ================================================== -->
+{# Placed at the top of the document so pages load faster with defer #}
+{% block javascript %}
+
+
+<!-- Bootstrap JS -->
+<script defer
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
+        integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+<!-- Your stuff: Third-party javascript libraries go here -->
+
+
+<!-- place project specific Javascript in this file -->
+
+
+{% compress js %}
+  <script defer src="{% static 'js/project.js' %}"></script>
+  {% comment %} <script defer src="{% static 'js/liveChat.js' %}"></script> {% endcomment %}
+{% endcompress %}
+
+
+{% endblock javascript %}
+</head>
+<body class="{% block bodyclass %}{% endblock bodyclass %}">
+
+
+  <div class="tt-style-switch index-dark">
+    <i class="bi bi-brightness-low-fill"></i>
+  </div>
+
+  {% block header %}
+  
+  {% include "components/header.html" %}
+  {% endblock header %}
+
+  {% block body %}
+  <div class="mb-1">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <div class="container-fluid">
+        <button class="navbar-toggler navbar-toggler-right"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'home' %}">africom</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'about' %}">About</a>
+            </li>
+            {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link"
+                   href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
+              </li>
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+              </li>
+            {% else %}
+              {% if ACCOUNT_ALLOW_REGISTRATION %}
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+          {{ message }}
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% block main %}
+      {% block content %}
+        <p>Use this document as a way to quick start any new project.</p>
+      {% endblock content %}
+    {% endblock main %}
+
+  </div>
+  {% endblock body %}
+  <!-- /container -->
+  {% block modal %}
+  {% endblock modal %}
+  {% block inline_javascript %}
+    {% comment %}
+    Script tags with only code, no src (defer by default). To run
+    with a "defer" so that you run inline code:
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        /* Run whatever you want */
+      });
+    </script>
+    {% endcomment %}
+  {% endblock inline_javascript %}
+
+  {% block footer %}
+  
+  {% include "components/footer.html" %}
+  {% endblock footer %}
+
+{% comment %}   
+  <script type="text/javascript">
+    (function(d, m){
+        var kommunicateSettings = 
+            {"appId":"308a35e729c36a14287cb9e96ee29eb12","popupWidget":true,"automaticChatOpenOnNavigation":true};
+        var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+        s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+        var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+        window.kommunicate = m; m._globals = kommunicateSettings;
+    })(document, window.kommunicate || {});
+/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+</script>
+ {% endcomment %}
+
+
+<!-- End of LiveChat code -->
+
+
+  <script src="{% static 'assets/js/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/jquery-ui.js' %}"></script>
+  
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/type.js' %}"></script>
+  
+  <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/slick.js' %}"></script>
+  
+  <script src="{% static 'assets/js/waypoints.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/wow.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/jquery.marquee.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/gsap.min.js' %}"></script>
+  <script src="{% static 'assets/js/ScrollTrigger.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/jquery.fancybox.min.js' %}"></script>
+  
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  <script>
+          $(".marquee_text").marquee({
+              direction: "left",
+              duration: 45000,
+              gap: 50,
+              delayBeforeStart: 0,
+              duplicated: true,
+              startVisible: true,
+          });
+          $(".marquee_text2").marquee({
+              direction: "left",
+              duration: 25000,
+              gap: 50,
+              delayBeforeStart: 0,
+              duplicated: true,
+              startVisible: true,
+          });
+      </script>
+
+</body>
+</html>
